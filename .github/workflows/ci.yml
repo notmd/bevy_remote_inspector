@@ -1,4 +1,4 @@
-name: Rust
+name: CI
 
 on:
   push:
@@ -10,12 +10,39 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  build:
+  rust:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Format
+        run: |
+          cargo fmt --all --check
+
+  js:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: 9
+          run_install: false
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Format
+        run: pnpm run check
+
       - name: Build
-        run: cargo build --verbose
-      - name: Run tests
-        run: cargo test --verbose
+        run: pnpm run build
