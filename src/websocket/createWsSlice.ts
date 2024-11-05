@@ -7,6 +7,7 @@ import { toast } from '@/shared/hooks/use-toast';
 import type { TType, TypeName } from '@/type-registry/useTypeRegistry';
 import type { ComponentId, ComponentInfo, ComponentValue } from '@/component/useComponents';
 import type { EntityId } from '@/entity/useEntity';
+import type { ScheduleInfo } from '@/schedule/createSchedulesSlice';
 export type WsSlice = {
   url?: string;
   readyState: ReadyState;
@@ -116,6 +117,8 @@ export const createWsSlice: StateCreator<SharedSlice, [], [], WsSlice> = (set, g
           get().updateComponents(item.components);
         } else if (item.kind === 'entity') {
           get().updateEntity(item.entity, item.mutation);
+        } else if (item.kind === 'schedules') {
+          get().setSchedules(item.schedules);
         } else {
           console.log(item);
         }
@@ -145,7 +148,7 @@ export type WsEvent = {
   };
 };
 
-type StreamEvent = TypeRegistryEvent | ComponentsEvent | EntityEvent;
+type StreamEvent = TypeRegistryEvent | ComponentsEvent | EntityEvent | ScheduleEvent;
 
 export type TypeRegistryEvent = {
   kind: 'type_registry';
@@ -161,6 +164,11 @@ export type EntityEvent = {
   kind: 'entity';
   entity: EntityId;
   mutation: EntityMutaion;
+};
+
+export type ScheduleEvent = {
+  kind: 'schedules';
+  schedules: ScheduleInfo[];
 };
 
 export type EntityMutaion = EntityMutationChange | EntityMutationRemove;

@@ -17,6 +17,8 @@ fn main() {
     app.add_plugins(DefaultPlugins)
         .add_plugins(RemoteInspectorPlugins)
         .add_systems(Startup, setup)
+        .configure_sets(Update, TestSet2.before(TestSet))
+        .configure_sets(Update, TestSet.after(TestSet2))
         .add_systems(
             Update,
             (
@@ -24,7 +26,9 @@ fn main() {
                 add_cube_children.run_if(input_just_pressed(KeyCode::KeyA)),
                 remove_cube_children.run_if(input_just_pressed(KeyCode::KeyS)),
                 update_text,
-            ),
+            )
+                .chain()
+                .in_set(TestSet),
         )
         .register_type::<Cube>()
         .register_type::<CubeChild>()
@@ -46,21 +50,13 @@ fn main() {
 
     app.world_mut().register_component::<ShouldRotate>();
 
-    app.add_systems(Startup, |world: &mut World| {
-        let id = world.spawn_empty().id();
-        world.insert_resource(MyRes(id));
-    })
-    .add_systems(PostStartup, |world: &mut World| {
-        let id = world.resource::<MyRes>().0;
-
-        world.entity_mut(id).insert(Text::new("Hello, Bevy!"));
-    });
-
     app.run();
 }
 
-#[derive(Resource)]
-struct MyRes(Entity);
+#[derive(SystemSet, Debug, Clone, PartialEq, Eq, Hash)]
+struct TestSet;
+#[derive(SystemSet, Debug, Clone, PartialEq, Eq, Hash)]
+struct TestSet2;
 
 #[derive(Component, Reflect, Debug)]
 struct MyComponent {

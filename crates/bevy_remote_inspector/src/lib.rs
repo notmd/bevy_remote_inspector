@@ -1,6 +1,7 @@
 mod command;
 mod component;
 mod entity;
+mod schedule;
 mod type_registry;
 
 use bevy::{
@@ -17,6 +18,7 @@ use bevy_remote_stream::{
 use command::Command;
 use component::InspectorComponentInfo;
 use entity::EntityMutation;
+use schedule::{ScheduleInfo, SchedulesPlugin};
 use serde::Serialize;
 use serde_json::Value;
 use type_registry::ZeroSizedTypes;
@@ -51,7 +53,8 @@ impl Plugin for RemoteInspectorPlugin {
             deep_compare_components.ids.insert(id);
         }
 
-        app.init_resource::<TrackedDatas>()
+        app.add_plugins(SchedulesPlugin)
+            .init_resource::<TrackedDatas>()
             .init_resource::<DisabledComponents>()
             .init_resource::<EntityVisibilities>()
             .insert_resource(deep_compare_components);
@@ -81,6 +84,7 @@ fn stream(
                 let type_registry = type_registry.read();
                 let tracked = tracked.entry(input.client_id).or_default();
                 tracked.track_type_registry(&mut events, &mut zsts, &type_registry);
+                tracked.track_schedules(&mut events, world, &type_registry);
                 // let new_tables = world
                 //     .archetypes()
                 //     .iter()
@@ -155,6 +159,7 @@ struct TrackedData {
     type_registry: bool,
     components: HashSet<ComponentId>,
     entities: EntityHashMap<HashSet<ComponentId>>,
+    schedules: bool,
     // resources: HashSet<ComponentId>,
     // tables: Vec<usize>,
 }
@@ -175,6 +180,9 @@ enum InspectorEvent {
     Entity {
         entity: Entity,
         mutation: EntityMutation,
+    },
+    Schedules {
+        schedules: Vec<ScheduleInfo>,
     },
     // NewTables {
     //     tables: Vec<usize>,
