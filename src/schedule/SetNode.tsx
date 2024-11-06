@@ -2,15 +2,9 @@ import { BaseNode } from '@/shared/base-node';
 import { Handle, type NodeProps, Position } from '@xyflow/react';
 import type { TScheduleNode } from './createSchedulesSlice';
 
-export function SetNode({ data, width, height }: NodeProps<TScheduleNode>) {
+export function SetNode({ data }: NodeProps<TScheduleNode>) {
   return (
-    <BaseNode
-      //   className="bg-blue-500"
-      style={{
-        width,
-        height,
-      }}
-    >
+    <BaseNode>
       <>
         {data.label}
         <Handle type="target" position={Position.Top} />

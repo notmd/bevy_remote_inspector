@@ -3,15 +3,14 @@ import {
   Background,
   Controls,
   type Edge,
-  type OnNodesChange,
   ReactFlow,
   type ReactFlowInstance,
-  applyNodeChanges,
   useEdgesState,
+  useNodesState,
   useReactFlow,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import type { TScheduleEdge, TScheduleNode } from './createSchedulesSlice';
 import ELK, { type LayoutOptions, type ElkNode } from 'elkjs/lib/elk.bundled.js';
 import { ScheduleNode } from './ScheduleNode';
@@ -27,31 +26,24 @@ const NODE_TYPES = {
 export function ScheduleGraph() {
   const storeNodes = useStore((s) => s.nodes);
   const storeEdges = useStore((s) => s.edges);
-  const [nodes, setNodes] = useState<TScheduleNode[]>(() => {
-    return storeNodes;
-  });
-  const { fitView } = useReactFlow();
-  const onNodesChange: OnNodesChange<TScheduleNode> = useCallback(
-    (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
-    [setNodes],
-  );
-  const [edges, setEdges, onEdgesChange] = useEdgesState(storeEdges);
-  const { getLayoutedElements: getLayout2 } = useLayoutedElements();
+
+  const [nodes, _setNodes, onNodesChange] = useNodesState(storeNodes);
+
+  const [edges, _setEdges, onEdgesChange] = useEdgesState(storeEdges);
+  const { getLayoutedElements } = useLayoutedElements();
   return (
     <ReactFlow
       nodeTypes={NODE_TYPES}
       nodes={nodes}
       edges={edges}
       onInit={useCallback(
-        (r: ReactFlowInstance<TScheduleNode, TScheduleEdge>) => {
-          getLayout2({
+        (_: ReactFlowInstance<TScheduleNode, TScheduleEdge>) => {
+          getLayoutedElements({
             'elk.algorithm': 'layered',
             'elk.direction': 'DOWN',
           });
-
-          window.requestAnimationFrame(() => fitView());
         },
-        [getLayout2],
+        [getLayoutedElements],
       )}
       onEdgesChange={onEdgesChange}
       onNodesChange={onNodesChange}
