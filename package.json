@@ -12,7 +12,6 @@
     "ci": "biome ci"
   },
   "dependencies": {
-    "@dagrejs/dagre": "^1.1.4",
     "@hookform/resolvers": "^3.9.0",
     "@radix-ui/react-checkbox": "^1.1.2",
     "@radix-ui/react-collapsible": "^1.1.1",
@@ -24,6 +23,7 @@
     "@xyflow/react": "^12.3.4",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "elkjs": "^0.9.3",
     "es-toolkit": "^1.24.0",
     "lucide-react": "^0.446.0",
     "react": "^18.2.0",

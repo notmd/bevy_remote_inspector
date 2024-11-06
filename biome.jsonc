@@ -35,7 +35,8 @@
       },
       "style": {
         "noNonNullAssertion": "off",
-        "useSelfClosingElements": "off"
+        "useSelfClosingElements": "off",
+        "noUnusedTemplateLiteral": "off"
       },
       "nursery": {
         "useSortedClasses": "error"

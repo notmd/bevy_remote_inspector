@@ -85,10 +85,8 @@ pub struct ScheduleInfo {
     name: String,
     systems: Vec<SystemInfo>,
     sets: Vec<SetInfo>,
-    hierarchy_nodes: Vec<(String, Vec<String>, Vec<String>)>,
-    hierarchy_edges: Vec<(String, String)>,
-    dependancy_nodes: Vec<(String, Vec<String>, Vec<String>)>,
-    dependancy_edges: Vec<(String, String)>,
+    hierarchies: Vec<(String, Vec<String>, Vec<String>)>,
+    dependencies: Vec<(String, String)>,
 }
 
 impl ScheduleInfo {
@@ -116,7 +114,7 @@ impl ScheduleInfo {
             })
             .collect();
 
-        let hierarchy_nodes = g
+        let hierarchies = g
             .hierarchy()
             .cached_topsort()
             .iter()
@@ -161,59 +159,7 @@ impl ScheduleInfo {
             })
             .collect();
 
-        let hierarchy_edges = g
-            .hierarchy()
-            .graph()
-            .all_edges()
-            .filter_map(|(a, b, _)| {
-                if g.set_at(a).system_type().is_some() {
-                    return None;
-                }
-
-                Some((get_node_id(&a), get_node_id(&b)))
-            })
-            .collect();
-
-        let dependancy_nodes = g
-            .dependency()
-            .graph()
-            .nodes()
-            .map(|n| {
-                let outgoing_neighbors = g
-                    .dependency()
-                    .graph()
-                    .neighbors_directed(n, petgraph::Direction::Outgoing)
-                    .filter_map(|n| {
-                        if let Some(set) = g.get_set_at(n) {
-                            if set.system_type().is_some() {
-                                return None;
-                            }
-                        }
-
-                        Some(get_node_id(&n))
-                    })
-                    .collect::<Vec<_>>();
-
-                let incoming_neighbors = g
-                    .dependency()
-                    .graph()
-                    .neighbors_directed(n, petgraph::Direction::Incoming)
-                    .filter_map(|n| {
-                        if let Some(set) = g.get_set_at(n) {
-                            if set.system_type().is_some() {
-                                return None;
-                            }
-                        }
-
-                        Some(get_node_id(&n))
-                    })
-                    .collect::<Vec<_>>();
-
-                (get_node_id(&n), outgoing_neighbors, incoming_neighbors)
-            })
-            .collect();
-
-        let dependancy_edges = g
+        let dependencies = g
             .dependency()
             .graph()
             .all_edges()
@@ -224,10 +170,8 @@ impl ScheduleInfo {
             name: format!("{:?}", schedule.label()),
             systems,
             sets,
-            hierarchy_nodes,
-            hierarchy_edges,
-            dependancy_nodes,
-            dependancy_edges,
+            hierarchies,
+            dependencies,
         }
     }
 }
