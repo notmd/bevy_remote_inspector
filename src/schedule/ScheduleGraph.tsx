@@ -7,7 +7,6 @@ import {
   useEdgesState,
   useNodesState,
 } from '@xyflow/react';
-import '@xyflow/react/dist/style.css';
 import { useCallback } from 'react';
 import type { TScheduleEdge, TScheduleNode } from './createSchedulesSlice';
 import { ScheduleNode } from './ScheduleNode';

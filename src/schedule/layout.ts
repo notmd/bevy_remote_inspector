@@ -1,5 +1,4 @@
 import { useReactFlow } from '@xyflow/react';
-import '@xyflow/react/dist/style.css';
 import { useCallback } from 'react';
 import type { TScheduleEdge, TScheduleNode } from './createSchedulesSlice';
 import ELK, { type LayoutOptions, type ElkNode } from 'elkjs/lib/elk.bundled.js';
