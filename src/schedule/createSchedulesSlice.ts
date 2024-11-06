@@ -26,12 +26,12 @@ export const createScheduleSlice: CreateSlice<ScheduleSlice> = (set) => ({
     let previousScheduleId = null;
     for (const [idx, schedule] of schedules.entries()) {
       console.log(schedule.name);
-      if (
-        // schedule.name !== 'PreStartup' &&
-        // schedule.name !== 'Startup' &&
-        schedule.name !== 'PreUpdate'
-      )
-        continue;
+      // if (
+      //   // schedule.name !== 'PreStartup' &&
+      //   // schedule.name !== 'Startup' &&
+      //   schedule.name !== 'PreUpdate'
+      // )
+      //   continue;
       console.log(schedule);
       const scheduleId = `${schedule.name}-${idx}`;
       if (previousScheduleId) {
