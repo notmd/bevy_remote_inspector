@@ -13,7 +13,7 @@ https://github.com/user-attachments/assets/adf9c68c-ddbf-40a9-aedc-06006e574a15
 
 ## Installation
 
-- `bevy_remote_inspector` currently require Bevy version `0.15.0-rc.3.
+- `bevy_remote_inspector` currently require Bevy version `0.15.0-rc.3`.
 
 ```bash
 cargo add bevy_remote_inspector --git https://github.com/notmd/bevy_remote_inspector.git
