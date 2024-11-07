@@ -4,10 +4,9 @@ import { ReadyState } from 'react-use-websocket';
 import { WsUrlForm } from '@/websocket/WsUrlForm';
 import { EntitiesInspectorPage } from '@/entity/EntitiesInspectorPage';
 import { SchedulePage } from '@/schedule/SchedulePage';
-import { usePage } from './usePage';
 
 export function RenderedPage() {
-  const [currentPage] = usePage();
+  const currentPage = useStore((s) => s.currentPage);
   const { readyState } = useWs();
   const hasConnected = useStore((state) => state.hasConnected);
   if (readyState !== ReadyState.OPEN && !hasConnected) {

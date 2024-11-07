@@ -1,19 +1,9 @@
-use std::any::{type_name_of_val, Any, TypeId};
-
 use bevy::{
-    animation::graph,
-    app::{DynEq, FixedMainScheduleOrder, MainScheduleOrder},
-    ecs::{
-        intern::Interned,
-        schedule::{InternedScheduleLabel, NodeId, ScheduleLabel},
-        system,
-    },
+    app::{FixedMainScheduleOrder, MainScheduleOrder},
+    ecs::schedule::{InternedScheduleLabel, NodeId, ScheduleLabel},
     prelude::*,
     reflect::TypeRegistry,
-    ui::update,
-    utils::{dbg, HashSet},
 };
-use indexmap::IndexMap;
 use serde::Serialize;
 
 use crate::{InspectorEvent, TrackedData};
@@ -54,7 +44,7 @@ fn collect_update_schedule(mut update_schedule: ResMut<UpdateSchedule>, schedule
     let schedule = schedules.get(Update);
 
     if let Some(sche) = schedule {
-        update_schedule.info = ScheduleInfo::from_schedule(sche);
+        update_schedule.info = ScheduleInfo::from_schedule(sche, ScheduleKind::Main);
     }
 }
 
@@ -80,9 +70,18 @@ pub struct SetInfo {
     name: String,
 }
 
-#[derive(Serialize, Default, Clone)]
+#[derive(Serialize, Clone, Default)]
+pub enum ScheduleKind {
+    Startup,
+    #[default]
+    Main,
+    FixedMain,
+}
+
+#[derive(Serialize, Clone, Default)]
 pub struct ScheduleInfo {
     name: String,
+    kind: ScheduleKind,
     systems: Vec<SystemInfo>,
     sets: Vec<SetInfo>,
     hierarchies: Vec<(String, Vec<String>, Vec<String>)>,
@@ -90,7 +89,7 @@ pub struct ScheduleInfo {
 }
 
 impl ScheduleInfo {
-    pub fn from_schedule(schedule: &Schedule) -> Self {
+    pub fn from_schedule(schedule: &Schedule, kind: ScheduleKind) -> Self {
         let systems = schedule
             .systems()
             .unwrap()
@@ -168,6 +167,7 @@ impl ScheduleInfo {
 
         Self {
             name: format!("{:?}", schedule.label()),
+            kind,
             systems,
             sets,
             hierarchies,
@@ -196,22 +196,28 @@ impl TrackedData {
         let schedules = world.resource::<Schedules>();
         let mut schedule_infos = Vec::new();
 
-        for label in main_order
-            .startup_labels
-            .iter()
-            .chain(main_order.labels.iter())
-        {
+        for label in main_order.startup_labels.iter() {
+            let Some(schedule) = schedules.get(*label) else {
+                continue;
+            };
+            schedule_infos.push(ScheduleInfo::from_schedule(schedule, ScheduleKind::Startup));
+        }
+
+        for label in main_order.labels.iter() {
             if label.0.as_dyn_eq().dyn_eq(RunFixedMainLoop.as_dyn_eq()) {
                 for schedule in fixed_main_order.labels.iter() {
-                    let schedule = schedules.get(*schedule);
-                    if let Some(schedule) = schedule {
-                        schedule_infos.push(ScheduleInfo::from_schedule(schedule));
-                    }
+                    let Some(schedule) = schedules.get(*schedule) else {
+                        continue;
+                    };
+                    schedule_infos.push(ScheduleInfo::from_schedule(
+                        schedule,
+                        ScheduleKind::FixedMain,
+                    ));
                 }
             } else {
                 let schedule = schedules.get(*label);
                 if let Some(schedule) = schedule {
-                    schedule_infos.push(ScheduleInfo::from_schedule(schedule));
+                    schedule_infos.push(ScheduleInfo::from_schedule(schedule, ScheduleKind::Main));
                 } else if label.0.as_dyn_eq().dyn_eq(Update.as_dyn_eq()) {
                     schedule_infos.push(update_schedule.info.clone());
                 }
