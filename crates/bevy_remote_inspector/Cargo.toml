@@ -9,7 +9,6 @@ serde.workspace = true
 serde_json.workspace = true
 anyhow.workspace = true
 bevy_remote_stream = { path = "../bevy_remote_stream" }
-indexmap = { version = "2.6.0", features = ["serde"] }
 petgraph = "0.6.5"
 
 [features]
