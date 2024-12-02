@@ -1,5 +1,4 @@
-<img alt="Crates.io Version" src="https://img.shields.io/crates/v/bevy_remote_inspector">
-<img alt="docs.rs" src="https://img.shields.io/docsrs/bevy_remote_inspector">
+<img alt="Crates.io Version" src="https://img.shields.io/crates/v/bevy_remote_inspector"><img alt="docs.rs" src="https://img.shields.io/docsrs/bevy_remote_inspector">
 
 # Bevy Remote Inspector
 
