@@ -5,9 +5,7 @@ edition = "2021"
 publish = false
 
 [dependencies]
-bevy = { workspace = true, default-features = true, features = [
-    "dynamic_linking",
-] }
+bevy = { workspace = true, default-features = true }
 serde.workspace = true
 serde_json.workspace = true
 bevy_remote_inspector = { path = "../../crates/bevy_remote_inspector" }

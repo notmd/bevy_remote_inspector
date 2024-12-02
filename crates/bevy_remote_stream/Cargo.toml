@@ -2,6 +2,10 @@
 name = "bevy_remote_stream"
 version = "0.1.0"
 edition = "2021"
+authors = ["notmd"]
+repository = "https://github.com/notmd/bevy_remote_inspector"
+description = "Remote streaming plugin for Bevy"
+license = "MIT"
 
 [dependencies]
 bevy.workspace = true

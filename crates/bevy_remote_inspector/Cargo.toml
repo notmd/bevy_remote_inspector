@@ -2,6 +2,10 @@
 name = "bevy_remote_inspector"
 version = "0.1.0"
 edition = "2021"
+authors = ["notmd"]
+repository = "https://github.com/notmd/bevy_remote_inspector"
+description = "A remote inspector for Bevy game engine, allowing you to inspect and modify entities in real-time."
+license = "MIT"
 
 [dependencies]
 bevy.workspace = true
