@@ -1047,7 +1047,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "bevy",
- "bevy_remote_stream",
+ "bevy_remote_stream 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "petgraph",
  "serde",
  "serde_json",
@@ -1056,6 +1056,26 @@ dependencies = [
 [[package]]
 name = "bevy_remote_stream"
 version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "bevy",
+ "futures-util",
+ "http-body-util",
+ "hyper",
+ "hyper-tungstenite",
+ "serde",
+ "serde_json",
+ "smol",
+ "smol-hyper",
+ "tungstenite",
+ "urlencoding",
+]
+
+[[package]]
+name = "bevy_remote_stream"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d124ad903eb8584e58da4e3daa59ba17b90f1aefa1e147d64b238bf08bb61914"
 dependencies = [
  "anyhow",
  "bevy",

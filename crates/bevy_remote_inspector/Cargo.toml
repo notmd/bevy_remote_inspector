@@ -12,7 +12,7 @@ bevy.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 anyhow.workspace = true
-bevy_remote_stream = { path = "../bevy_remote_stream" }
+bevy_remote_stream = { version = "0.1" }
 petgraph = "0.6.5"
 
 [features]
