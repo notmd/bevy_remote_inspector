@@ -1,3 +1,6 @@
+<img alt="Crates.io Version" src="https://img.shields.io/crates/v/bevy_remote_inspector">
+<img alt="docs.rs" src="https://img.shields.io/docsrs/bevy_remote_inspector">
+
 # Bevy Remote Inspector
 
 A remote inspector for Bevy game engine, allowing you to inspect and modify entities in real-time. Alternative to [bevy-inspector-egui](https://github.com/jakobhellermann/bevy-inspector-egui).
@@ -13,10 +16,10 @@ https://github.com/user-attachments/assets/adf9c68c-ddbf-40a9-aedc-06006e574a15
 
 ## Installation
 
-- `bevy_remote_inspector` currently require Bevy version `0.15.0-rc.3`.
+- `bevy_remote_inspector` currently require Bevy version `0.15.0`.
 
 ```bash
-cargo add bevy_remote_inspector --git https://github.com/notmd/bevy_remote_inspector.git
+cargo add bevy_remote_inspector
 ```
 
 ## Usage
@@ -70,3 +73,9 @@ pnpm run dev
 ```
 
 - Then open [http://localhost:1420](http://localhost:1420) in your browser.
+
+## Bevy compatibility
+
+| `bevy_remote_inspector` | `bevy` |
+| ----------------------- | ------ |
+| 0.1.0                   | 0.15.0 |
